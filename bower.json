@@ -1,5 +1,5 @@
 {
-  "name": "angular-repository",
+  "name": "angular-vrepository",
   "description": "API Repository factory for Angular Js based on ngResource",
   "authors": [
     "Rafał Lorenz <vardius@gmail.com>"
