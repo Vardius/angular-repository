@@ -8,7 +8,7 @@ API Repository factory for Angular Js based on ngResource
 Install with bower:
 
 ```bash
-$ bower install angular-repository --save
+$ bower install angular-vrepository --save
 ```
 
 Install with npm:
