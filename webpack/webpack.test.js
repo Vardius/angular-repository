@@ -14,6 +14,10 @@ module.exports = {
     resolveLoader: {
         modulesDirectories: ["node_modules"]
     },
+    externals: {
+        'angular': 'angular',
+        'angular-resource': 'angular-resource'
+    },
     devtool: "source-map-inline",
     module: {
         loaders: loaders,

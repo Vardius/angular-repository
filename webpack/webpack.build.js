@@ -14,6 +14,10 @@ module.exports = {
     resolveLoader: {
         modulesDirectories: ["node_modules"]
     },
+    externals: {
+        'angular': 'angular',
+        'angular-resource': 'angular-resource'
+    },
     plugins: [
         new webpack.ProvidePlugin({_: 'lodash'}),
         new webpack.optimize.OccurenceOrderPlugin(),
