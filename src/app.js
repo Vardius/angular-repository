@@ -7,7 +7,6 @@
  * file that was distributed with this source code.
  */
 
-import 'angular-resource';
 import {RepositoryFactoryProvider} from "./provider/RepositoryFactoryProvider";
 
 (function (root, factory) {
