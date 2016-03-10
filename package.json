@@ -2,7 +2,7 @@
   "name": "angular-repository",
   "description": "API Repository factory for Angular Js based on ngResource",
   "private": false,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/Vardius/angular-repository",
   "author": {
     "name": "Rafał Lorenz",
