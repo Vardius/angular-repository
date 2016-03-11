@@ -21,10 +21,12 @@ export class RepositoryFactory {
         ];
 
         for (let attr in this.required) {
-            if (!config.hasOwnProperty(this.required.attr)) {
-                throw new Error(`Missing parameter: ${this.required.attr}.`);
-            } else if (this.required.attr === 'url' && !this.isURL(config.url)) {
-                throw new Error(`Parameter: ${config.url} is not valid url.`);
+            if (this.required.hasOwnProperty(attr)) {
+                if (!config.hasOwnProperty(this.required[attr])) {
+                    throw new Error(`Missing parameter: ${this.required[attr]}.`);
+                } else if (this.required[attr] === 'url' && !this.isURL(config.url)) {
+                    throw new Error(`Parameter: ${config.url} is not valid url.`);
+                }
             }
         }
 
