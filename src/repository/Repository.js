@@ -13,8 +13,8 @@ export class Repository {
         this.model = model;
         this.$resource = $resource;
         this.resource = this.getResource(path);
-        this.onError = onError;
-        this.onSuccess = onSuccess;
+        this.onError = onError.bind(this);
+        this.onSuccess = onSuccess.bind(this);
     }
 
     /**
