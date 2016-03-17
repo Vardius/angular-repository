@@ -16,10 +16,7 @@ export class RepositoryFactoryProvider {
      */
     constructor() {
         this.$get.$inject = ['$resource'];
-        this.config = {
-            onSuccess: this.onSuccess,
-            onError: this.onError
-        };
+        this.config = {};
     }
 
     /**
@@ -33,26 +30,6 @@ export class RepositoryFactoryProvider {
                 this.config[attr] = config[attr];
             }
         }
-    }
-
-    /**
-     * Success callback
-     *
-     * @param response
-     * @returns {*}
-     */
-    onSuccess(response) {
-        return response;
-    }
-
-    /**
-     * Error callback
-     *
-     * @param response
-     * @returns {*}
-     */
-    onError(response) {
-        return response;
     }
 
     /**

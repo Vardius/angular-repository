@@ -8,13 +8,22 @@
  */
 
 export class Repository {
+
+    /**
+     * @param model
+     * @param path
+     * @param url
+     * @param $resource
+     * @param onSuccess
+     * @param onError
+     */
     constructor(model, path, url, $resource, onSuccess, onError) {
         this.url = url;
         this.model = model;
         this.$resource = $resource;
         this.resource = this.getResource(path);
-        this.onError = onError.bind(this);
-        this.onSuccess = onSuccess.bind(this);
+        this.onError = typeof (onError) == 'function' ? onError.bind(this) : undefined;
+        this.onSuccess = typeof (onSuccess) == 'function' ? onSuccess.bind(this) : undefined;
     }
 
     /**
