@@ -5,7 +5,7 @@ module.exports = {
     entry: './src/app.js',
     output: {
         filename: 'angular-repository.js',
-        path: 'tmp'
+        path: 'dist'
     },
     resolve: {
         root: __dirname,
@@ -23,7 +23,7 @@ module.exports = {
         loaders: loaders,
         postLoaders: [
             {
-                test: /^((?!\.spec\.ts).)*.ts$/,
+                test: /^((?!\.spec\.ts).)*.ts/,
                 exclude: /(node_modules|bower_components)/,
                 loader: 'istanbul-instrumenter'
             }
