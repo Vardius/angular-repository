@@ -83,7 +83,8 @@ Example usage:
 
 ```javascript
 
-class User {
+//remeber that your mdoel class ahs to extend ENtity class provider by this package
+class User extends Entity {
     constructor(parameters) {
         this.id = parameters.id;
         this.email = parameters.email;
