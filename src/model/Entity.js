@@ -9,25 +9,22 @@
 export class Entity {
 
     constructor(parameters = {}) {
-        let id = null;
         if (!isNaN(parseInt(parameters))) {
-            id = parameters;
+            if (Entity.pool[this.constructor.name] && Entity.pool[this.constructor.name][parameters] instanceof Entity) {
+                return Entity.pool[this.constructor.name][parameters];
+            }
         } else if (parameters.id) {
-            id = parameters.id;
-        }
-
-        if (id) {
-            if (Entity.pool[this.constructor.name] && Entity.pool[this.constructor.name][id] instanceof Entity) {
-                return Entity.pool[this.constructor.name][id];
+            if (Entity.pool[this.constructor.name] && Entity.pool[this.constructor.name][parameters.id] instanceof Entity) {
+                return Entity.pool[this.constructor.name][parameters.id];
             }
 
             if (!Entity.pool[this.constructor.name]) {
                 Entity.pool[this.constructor.name] = [];
             }
 
-            Entity.pool[this.constructor.name][id] = this;
+            Entity.pool[this.constructor.name][parameters.id] = this;
         }
     }
 }
 
-Object.defineProperty(Entity, 'pool', {value: [], writable: true});
+Object.defineProperty(Entity, 'pool', {value: [], writable: true, enumerable: true});

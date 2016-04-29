@@ -81,17 +81,26 @@ angular.module('app', ['vRepository']);
 
 Example usage:
 
+Create your entity class
 ```javascript
-
-//remeber that your mdoel class ahs to extend ENtity class provider by this package
+                        
+//remeber that your mdoel class has to extend Entity class provider by this package
 class User extends Entity {
     constructor(parameters) {
+        //this 2 lines are required !!!
+        let entity = super(parameters);
+        if (entity.id) return entity;
+        
         this.id = parameters.id;
         this.email = parameters.email;
         this.name = parameters.name;
     }
 }
 
+```
+
+Example List controller for your model
+```javascript
 export class ListController {
     static $inject = ['$scope', 'RepositoryFactory'];
     
@@ -128,7 +137,6 @@ export class ListController {
 ```
 
 You can also provide `onSuccess` and `onError` callback to the `getRepository` method
-
 ```javascript
 export class ListController {
 
