@@ -94,6 +94,10 @@ class User extends Entity {
         this.id = parameters.id;
         this.email = parameters.email;
         this.name = parameters.name;
+        
+        //after parameter remember to turn on watcher
+        //so multiple API call will not reset your changes
+        this.watch();
     }
 }
 
