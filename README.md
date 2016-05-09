@@ -86,9 +86,9 @@ Create your entity class
                         
 //remeber that your mdoel class has to extend Entity class provider by this package
 class User extends Entity {
-    constructor(parameters) {
+    constructor(parameters, merge = false) {
         //this 2 lines are required !!!
-        let entity = super(parameters);
+        let entity = super(parameters, merge);
         if (entity.id) return entity;
         
         this.id = parameters.id;

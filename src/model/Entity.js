@@ -65,7 +65,7 @@ export class Entity {
 
                 let val = desc.value;
 
-                if (desc.value) {
+                if (val != undefined) {
                     getter = function () {
                         return val;
                     };
