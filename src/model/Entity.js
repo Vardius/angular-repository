@@ -16,10 +16,16 @@ export class Entity {
         } else if (parameters.id) {
             if (Entity.pool[this.constructor.name] && Entity.pool[this.constructor.name][parameters.id] instanceof Entity) {
                 let entity = Entity.pool[this.constructor.name][parameters.id];
-                if (merge === true) {
-                    for (let prop in entity) {
-                        if (entity.hasOwnProperty(prop) && prop !== 'id' && !entity.changed[prop] && !(entity[prop] instanceof Array)) {
+
+                for (let prop in entity) {
+                    if (entity.hasOwnProperty(prop) && prop !== 'id' && !(entity[prop] instanceof Array)) {
+                        if (entity[prop] === undefined) {
                             entity[prop] = parameters[prop];
+                        }
+                        if (merge === true) {
+                            if (!entity.changed[prop] && parameters[prop] !== undefined) {
+                                entity[prop] = parameters[prop];
+                            }
                         }
                     }
                 }
@@ -35,6 +41,20 @@ export class Entity {
 
             Entity.pool[this.constructor.name][parameters.id] = this;
         }
+    }
+
+    contains(haystack, needle) {
+        var found = false;
+        if (haystack) {
+            for (let i = 0; i < haystack.length; i++) {
+                if (haystack[i].id === needle.id) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+
+        return found;
     }
 
     unwatch() {
@@ -54,6 +74,10 @@ export class Entity {
     watch() {
         for (let prop in this) {
             if (this.hasOwnProperty(prop)) {
+                if (this[prop] instanceof Array || this[prop] instanceof Entity) {
+                    continue;
+                }
+
                 let desc = Object.getOwnPropertyDescriptor(this, prop),
                     getter = desc.get, setter = desc.set;
 
