@@ -161,3 +161,5 @@ export class ListController {
 ```
 
 They will override global callback provided in your config for this specific model only.
+
+* [Extending `Entity` class model](doc/entity.md)

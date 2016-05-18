@@ -74,7 +74,7 @@ export class Entity {
     watch() {
         for (let prop in this) {
             if (this.hasOwnProperty(prop)) {
-                if (this[prop] instanceof Array || this[prop] instanceof Entity) {
+                if (this[prop] instanceof Array || this[prop] instanceof Entity || prop === 'id') {
                     continue;
                 }
 
