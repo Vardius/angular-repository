@@ -47,7 +47,7 @@ export class Entity {
         var found = false;
         if (haystack) {
             for (let i = 0; i < haystack.length; i++) {
-                if (haystack[i].id === needle.id) {
+                if (haystack[i] && needle && haystack[i].hasOwnProperty('id') && needle.hasOwnProperty('id') && haystack[i].id === needle.id) {
                     found = true;
                     break;
                 }
@@ -55,6 +55,25 @@ export class Entity {
         }
 
         return found;
+    }
+
+    getter(model, property) {
+        return property instanceof model ? property : new model(property);
+    }
+
+    setter(data, model, property) {
+        if (data) {
+            if (data instanceof model) return data;
+
+            let entity = new model(data);
+            if (entity.id) {
+                property = entity.id;
+            } else {
+                property = entity;
+            }
+        }
+
+        return property;
     }
 
     unwatch() {
@@ -90,9 +109,11 @@ export class Entity {
                 let val = desc.value;
 
                 if (val != undefined) {
-                    getter = function () {
-                        return val;
-                    };
+                    if (!getter) {
+                        getter = function () {
+                            return val;
+                        };
+                    }
                 } else {
                     getter = desc.get;
                 }
