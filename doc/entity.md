@@ -16,12 +16,8 @@ And lest it all nicely worked our constructor entities must have a specific stru
 
 It looks like:
 ```javascript
-constructor(parameters = {}, merge = false) {
+    constructor(parameters = {}, merge = false) {
        let entity = super(parameters, merge);
-
-       if (parameters.innaEncja) {
-           this.oterEntity= new OterEntity(parameters.innaEncja, merge);
-       }
 
        this.collection = this.collection || [];
        if (parameters.collection ) {
@@ -32,6 +28,8 @@ constructor(parameters = {}, merge = false) {
                }
            }
        }
+       
+       this.oterEntity = parameters.oterEntity;
 
        if (entity.id) return entity;
 
@@ -39,7 +37,15 @@ constructor(parameters = {}, merge = false) {
        this.name = parameters.name;
 
        this.watch();
-   }
+    }
+
+    get oterEntity() {
+        return this.getter(OterEntity, this._oterEntity);
+    }
+
+    set oterEntity(data) {
+        return this._oterEntity = this.setter(data, OterEntity);
+    }
 ```
 
 It is important that at the very beginning (after `super`) to call up the appropriate constructors for nested objects in the example collection and a single object

@@ -9,23 +9,35 @@
 export class Entity {
 
     constructor(parameters = {}, merge = false) {
+        if (!Entity.pool[this.constructor.name]) {
+            Entity.pool[this.constructor.name] = [];
+        }
+
+        if (!this.changed) {
+            this.changed = [];
+        }
+
         if (!isNaN(parseInt(parameters))) {
             if (Entity.pool[this.constructor.name] && Entity.pool[this.constructor.name][parameters] instanceof Entity) {
                 return Entity.pool[this.constructor.name][parameters];
+            } else {
+                this.id = parameters;
+                Entity.pool[this.constructor.name][parameters] = this;
             }
         } else if (parameters.id) {
             if (Entity.pool[this.constructor.name] && Entity.pool[this.constructor.name][parameters.id] instanceof Entity) {
                 let entity = Entity.pool[this.constructor.name][parameters.id];
 
                 for (let prop in entity) {
-                    if (entity.hasOwnProperty(prop) && prop !== 'id' && !(entity[prop] instanceof Array)) {
-                        if (entity[prop] === undefined) {
-                            entity[prop] = parameters[prop];
+                    if (prop.charAt(0) !== '_' && entity.hasOwnProperty(prop) && parameters[prop] !== undefined) {
+                        if (entity[prop] instanceof Array || prop === 'id') {
+                            continue;
                         }
-                        if (merge === true) {
-                            if (!entity.changed[prop] && parameters[prop] !== undefined) {
-                                entity[prop] = parameters[prop];
-                            }
+
+                        if (entity[prop] instanceof Entity || entity[prop] === undefined) {
+                            entity[prop] = parameters[prop];
+                        } else if (merge === true && !entity.changed[prop]) {
+                            entity[prop] = parameters[prop];
                         }
                     }
                 }
@@ -33,18 +45,12 @@ export class Entity {
                 return entity;
             }
 
-            if (!Entity.pool[this.constructor.name]) {
-                Entity.pool[this.constructor.name] = [];
-            }
-
-            this.changed = [];
-
             Entity.pool[this.constructor.name][parameters.id] = this;
         }
     }
 
     contains(haystack, needle) {
-        var found = false;
+        let found = false;
         if (haystack) {
             for (let i = 0; i < haystack.length; i++) {
                 if (haystack[i] && needle && haystack[i].hasOwnProperty('id') && needle.hasOwnProperty('id') && haystack[i].id === needle.id) {
@@ -61,25 +67,38 @@ export class Entity {
         return property instanceof model ? property : new model(property);
     }
 
-    setter(data, model, property) {
+    setter(data, model) {
         if (data) {
             if (data instanceof model) return data;
 
-            let entity = new model(data);
-            if (entity.id) {
-                property = entity.id;
-            } else {
-                property = entity;
+            let entity = new model(data, true);
+
+            return entity.id ? entity.id : entity;
+        }
+    }
+
+    collectionSetter(data, model, collection, merge = false) {
+        if (data) {
+            for (let i = 0; i < data.length; i++) {
+                let entity = new model(data[i], merge);
+                if (!this.contains(collection, entity)) {
+                    collection.push(entity);
+                }
+            }
+            if (merge) {
+                for (let i = collection.length - 1; i >= 0; i--) {
+                    if (!collection[i] || !collection[i].id) {
+                        collection.splice(i, 1);
+                    }
+                }
             }
         }
-
-        return property;
     }
 
     unwatch() {
         for (let prop in this) {
-            if (this.hasOwnProperty(prop)) {
-                if (this[prop] instanceof Array) {
+            if (prop.charAt(0) !== '_' && this.hasOwnProperty(prop)) {
+                if (this[prop] instanceof Array || prop === 'id' || this[prop] instanceof Entity) {
                     continue;
                 }
 
@@ -92,8 +111,8 @@ export class Entity {
 
     watch() {
         for (let prop in this) {
-            if (this.hasOwnProperty(prop)) {
-                if (this[prop] instanceof Array || this[prop] instanceof Entity || prop === 'id') {
+            if (prop.charAt(0) !== '_' && this.hasOwnProperty(prop)) {
+                if (this[prop] instanceof Array || prop === 'id' || this[prop] instanceof Entity) {
                     continue;
                 }
 
@@ -126,7 +145,7 @@ export class Entity {
                         val = newVal;
                     }
 
-                    this.changed[prop] = prop;
+                    this.setChanged(prop);
 
                     return val;
                 };
@@ -140,6 +159,10 @@ export class Entity {
                 }
             }
         }
+    }
+
+    setChanged(propName) {
+        this.changed[propName] = propName;
     }
 }
 
