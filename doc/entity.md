@@ -20,6 +20,22 @@ It looks like:
        let entity = super(parameters, merge);
 
        this.collection = this.collection || [];
+
+       if (entity.id){
+           this.setRelations(parameters);
+           
+           return entity;
+       }
+
+       this.id = parameters.id;
+       this.name = parameters.name;
+       
+       this.setRelations(parameters);
+
+       this.watch();
+    }
+    
+    setRelations(parameters){
        if (parameters.collection ) {
            for (let i = 0; i < parameters.collection .length; i++) {
                let oterEntity = new OterEntity(parameters.collection [i], merge);
@@ -29,14 +45,9 @@ It looks like:
            }
        }
        
-       this.oterEntity = parameters.oterEntity;
-
-       if (entity.id) return entity;
-
-       this.id = parameters.id;
-       this.name = parameters.name;
-
-       this.watch();
+        if (parameters.hasOwnProperty('oterEntity')) {
+            this.oterEntity = parameters.oterEntity;
+        }
     }
 
     get oterEntity() {
